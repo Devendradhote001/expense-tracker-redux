@@ -1,11 +1,17 @@
-
 import { Card, Row, Col, ProgressBar } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import {
+  selectRemainingBudget,
+  selectSalary,
+  selectTotalExpenses,
+} from "../features/expenseSlice";
 
 const ExpenseSummary = () => {
-  const salary = 5000;
-  const totalExpenses = 3000;
-  const remainingBudget = 2000;
-
+  const salary = useSelector((state) => {
+    return state.expenses.salary;
+  });
+  const totalExpenses = useSelector(selectTotalExpenses);
+  const remainingBudget = useSelector(selectRemainingBudget);
 
   // Calculate percentage of salary spent
   const percentageSpent = salary > 0 ? (totalExpenses / salary) * 100 : 0;

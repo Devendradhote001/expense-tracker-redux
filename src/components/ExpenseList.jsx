@@ -1,9 +1,11 @@
-
 import { Card } from "react-bootstrap";
 import ExpenseItem from "./ExpenseItem";
+import { useSelector } from "react-redux";
+import { selectExpenses } from "../features/expenseSlice";
 
 const ExpenseList = () => {
-  const expenses = [];
+  const expenses = useSelector(selectExpenses);
+  console.log("expenses->", expenses);
 
   return (
     <Card className="mb-4">

@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Button, Card, Form, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteExpense,
+  editExpense,
+  selectCategories,
+} from "../features/expenseSlice";
 
 const ExpenseItem = ({ expense }) => {
-  const categories = [
-    "Food",
-    "Transportation",
-    "Housing",
-    "Entertainment",
-    "Utilities",
-    "Healthcare",
-    "Other",
-  ];
+  const dispatch = useDispatch();
+  const categories = useSelector(selectCategories);
   const [isEditing, setIsEditing] = useState(false);
   const [editedExpense, setEditedExpense] = useState({
     ...expense,
@@ -19,6 +18,7 @@ const ExpenseItem = ({ expense }) => {
 
   const handleDelete = () => {
     console.log(expense.id);
+    dispatch(deleteExpense(expense.id));
   };
 
   const handleEdit = () => {
@@ -31,6 +31,16 @@ const ExpenseItem = ({ expense }) => {
   };
 
   const handleSave = () => {
+    dispatch(
+      editExpense({
+        ...editedExpense,
+        amount: Number(editedExpense.amount),
+      })
+    );
+    setEditedExpense({
+      ...expense,
+      date: new Date(expense.date).toISOString().split("T")[0],
+    });
     setIsEditing(false);
   };
 
@@ -123,13 +133,14 @@ const ExpenseItem = ({ expense }) => {
               <div>
                 <h5>{expense.title}</h5>
                 <div className="text-muted">
+                  ƒ
                   <small>
                     {expense.category} • {formattedDate}
                   </small>
                 </div>
               </div>
               <div className="d-flex align-items-center">
-                <h5 className="mb-0 me-3">${expense.amount.toFixed(2)}</h5>
+                <h5 className="mb-0 me-3">₹{expense.amount.toFixed(2)}</h5>
                 <div className="d-flex gap-2">
                   <Button
                     variant="outline-primary"

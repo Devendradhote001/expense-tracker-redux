@@ -1,16 +1,11 @@
 import { useState } from "react";
 import { Form, Button, Card, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { addExpense, selectCategories } from "../features/expenseSlice";
 
 const ExpenseForm = () => {
-  const categories = [
-    "Food",
-    "Transportation",
-    "Housing",
-    "Entertainment",
-    "Utilities",
-    "Healthcare",
-    "Other",
-  ];
+  const dispatch = useDispatch();
+  const categories = useSelector(selectCategories);
 
   const [expense, setExpense] = useState({
     title: "",
@@ -27,6 +22,12 @@ const ExpenseForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    dispatch(
+      addExpense({
+        ...expense,
+        amount: Number(expense.amount),
+      })
+    );
     // Reset form
     setExpense({
       title: "",

@@ -1,15 +1,15 @@
 import { Form, Card, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectCategories,
+  selectFilter,
+  setFilters,
+} from "../features/expenseSlice";
 
 const CategoryFilter = () => {
-  const categories = [
-    "Food",
-    "Transportation",
-    "Housing",
-    "Entertainment",
-    "Utilities",
-    "Healthcare",
-    "Other",
-  ];
+  const dispatch = useDispatch();
+  const categories = useSelector(selectCategories);
+  const filter = useSelector(selectFilter);
 
   const months = [
     "January",
@@ -31,15 +31,15 @@ const CategoryFilter = () => {
   const years = Array.from({ length: 6 }, (_, i) => currentYear - i);
 
   const handleCategoryChange = (e) => {
-    //
+    dispatch(setFilters({ category: e.target.value }));
   };
 
   const handleMonthChange = (e) => {
-    //
+    dispatch(setFilters({ month: parseInt(e.target.value) }));
   };
 
   const handleYearChange = (e) => {
-    //
+    dispatch(setFilters({ year: parseInt(e.target.value) }));
   };
 
   return (
@@ -50,7 +50,10 @@ const CategoryFilter = () => {
           <Col md={4}>
             <Form.Group className="mb-3">
               <Form.Label>Category</Form.Label>
-              <Form.Select value={"Category"} onChange={handleCategoryChange}>
+              <Form.Select
+                value={filter.category}
+                onChange={handleCategoryChange}
+              >
                 <option value="All">All Categories</option>
                 {categories.map((category) => (
                   <option key={category} value={category}>
@@ -63,7 +66,7 @@ const CategoryFilter = () => {
           <Col md={4}>
             <Form.Group className="mb-3">
               <Form.Label>Month</Form.Label>
-              <Form.Select value={"month"} onChange={handleMonthChange}>
+              <Form.Select value={filter.month} onChange={handleMonthChange}>
                 {months.map((month, index) => (
                   <option key={month} value={index}>
                     {month}
@@ -75,7 +78,7 @@ const CategoryFilter = () => {
           <Col md={4}>
             <Form.Group className="mb-3">
               <Form.Label>Year</Form.Label>
-              <Form.Select value={"Year"} onChange={handleYearChange}>
+              <Form.Select value={filter.year} onChange={handleYearChange}>
                 {years.map((year) => (
                   <option key={year} value={year}>
                     {year}
